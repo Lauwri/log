@@ -1,0 +1,11 @@
+# Log files
+logs
+
+# Tests
+tests
+jest.config.js
+
+# Files
+.gitignore
+example.ts
+tsconfig.json

@@ -1,0 +1,31 @@
+{
+  "name": "@lauwri/log",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "types:gen": "tsc -d --outDir ./dist --emitDeclarationOnly",
+    "publish:pre": "npm run build && npm run types:gen",
+    "test": "jest",
+    "example": "ts-node example.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Lauwri/log.git"
+  },
+  "homepage": "https://github.com/Lauwri/log#readme",
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^27.0.2",
+    "@types/node": "^16.11.4",
+    "jest": "^27.3.1",
+    "ts-jest": "^27.0.7",
+    "nodemon": "^2.0.14",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.4.4"
+  },
+  "dependencies": {}
+}
