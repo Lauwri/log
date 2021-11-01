@@ -1,13 +1,17 @@
+import * as fs from "fs";
 import { Colors, Level } from "./constants";
 import log from "./log";
 import createWriteStream from "./stream";
-import getCallerFile, { FileData } from "./utils/getCallerFile";
+import getCallerFile from "./utils/getCallerFile";
+import tagFile from "./utils/tagFile";
 
 export interface Options {
   logLevels: Level[];
   enableLogging: boolean;
   enableFile: boolean;
   outputFile: string;
+  tagDate?: boolean;
+  tagFileMessage: string;
   color: {
     [Level.Debug]: Colors;
     [Level.Critical]: Colors;
@@ -23,6 +27,8 @@ const defaultOptions: Options = {
   enableLogging: true,
   enableFile: false,
   outputFile: "./logs/logs.txt",
+  tagDate: true,
+  tagFileMessage: `Logging started at ${new Date().toISOString()}\nfrom origin ${process.cwd()}\n`,
   color: {
     [Level.Debug]: Colors.FgGreen,
     [Level.Critical]: Colors.FgRed,
@@ -35,10 +41,12 @@ export let options: Options = defaultOptions;
 
 /**
  * @param _options Custom parameters for logging, use {} for resetting defaults
- * @param {MLevel[]} _options.logLevels Array of levels to log
- * @param {boolean} _options.enableLogging Enable logging to console
- * @param {boolean} _options.enableFile Enable logging to file
- * @param {string} _options.outputFile path to log output file
+ * @param {MLevel[]} _options.logLevels Array of levels to log, default all
+ * @param {boolean} _options.enableLogging Enable logging to console, default true
+ * @param {boolean} _options.enableFile Enable logging to file, default true
+ * @param {string} _options.outputFile path to log output file, default ./logs/logs.txt
+ * @param {string} _options.tagDate tags file with a timestamp, default true
+ * @param {string} _options.tagFileMessage tags file with a message, default Logging started at Date.now()\nfromorigin process.cwd()
  * @param _options.color Colors for logging levels
  */
 export const setup = (_options: Partial<Options>) =>
@@ -51,11 +59,15 @@ const createOptions = (_options: Partial<Options>) =>
     color: { ...options.color, ..._options.color },
   });
 
-const createStream = () =>
-  options.outputFile && options.enableFile
-    ? createWriteStream(options.outputFile)
-    : undefined;
-
+const createStream = (_stream?: fs.WriteStream) => {
+  if (options.outputFile && options.enableFile) {
+    _stream && _stream.close();
+    return createWriteStream(
+      options.tagDate ? tagFile(options.outputFile) : options.outputFile,
+      options.tagFileMessage
+    ); // Should tagging be an option?
+  }
+};
 // Expose stream for custom actions
 export let stream = createStream();
 

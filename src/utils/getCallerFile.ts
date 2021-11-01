@@ -1,4 +1,9 @@
-export type FileData = { path: string; line: string; column: string };
+export type FileData = {
+  path: string;
+  line: string;
+  column: string;
+  string: string;
+};
 const getCallerFile = (distance = 4): FileData | undefined => {
   const e = new Error();
   const regex = /([^\/\\]+):(\d+):(\d+)\D*$/;
@@ -8,7 +13,9 @@ const getCallerFile = (distance = 4): FileData | undefined => {
         path: match[1],
         line: match[2],
         column: match[3],
+        string: `${match[1]}:${match[2]}:${match[3]}`,
       }
     : undefined;
 };
+
 export default getCallerFile;

@@ -7,6 +7,7 @@ const ensureDir = (filePath: string) => {
     return true;
   }
   fs.mkdirSync(dirname);
+  return true;
 };
 
 export default ensureDir;

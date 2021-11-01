@@ -18,7 +18,7 @@ const template: Template = (
   stripped = false
 ) => {
   const date = new Date().toISOString();
-  const origin = `${fileData?.path}:${fileData?.line}:${fileData?.column}`;
+  const origin = fileData?.string;
 
   const parsed = NO_PARSE.includes(typeof msg)
     ? msg

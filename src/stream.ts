@@ -1,12 +1,10 @@
 import * as fs from "fs";
-import * as path from "path";
+import ensureDir from "./utils/ensureDir";
 
-import ensureFile from "./utils/ensureFile";
-
-const createWriteStream = (outputFile: string) => {
-  const logPath = path.join(process.cwd(), outputFile);
-  ensureFile(logPath);
-  const _stream = fs.createWriteStream(logPath, { flags: "w" });
+const createWriteStream = (logPath: string, startTag?: string) => {
+  ensureDir(logPath);
+  const _stream = fs.createWriteStream(logPath, { flags: "a" });
+  startTag && _stream.write(startTag);
   const _close = () => _stream.close();
   process.on("SIGINT", _close);
   process.on("SIGKILL", _close);
