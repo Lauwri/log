@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import path from "path";
 import log, { options, stream } from "../src";
+import { Colors } from "../src/constants";
 
 const TEST_FOLDER = "./log_test/";
 const TEST_FILE = "test_log.txt";
@@ -28,8 +29,13 @@ describe("File log tests", () => {
     const testObj = { value: "test object" };
     log.info("Test string", testObj);
 
-    const strMatch = expect.stringMatching(" file.test.ts:29:9: %s");
-    expect(logSpy).toHaveBeenCalledWith(strMatch, "Test string", testObj);
+    const strMatch = expect.stringMatching(" file.test.ts:30:9: %s");
+    expect(logSpy).toHaveBeenCalledWith(
+      strMatch,
+      "Test string",
+      testObj,
+      Colors.Reset
+    );
 
     const _path =
       stream?.path && path.join(process.cwd(), stream.path as string);
@@ -44,7 +50,7 @@ describe("File log tests", () => {
     const file =
       _path && fs.readFileSync(_path, { encoding: "utf8", flag: "r" });
 
-    const testStr = ` file.test.ts:29:9: Test string
+    const testStr = ` file.test.ts:30:9: Test string
 {
   \"value\": \"test object\"
 }`;
