@@ -12,6 +12,7 @@ export interface Options {
   outputFile: string;
   tagDate?: boolean;
   tagLevel?: boolean;
+  tagColor?: boolean;
   tagFileMessage: string;
   color: {
     [Level.Debug]: Colors;
@@ -30,6 +31,7 @@ const defaultOptions: Options = {
   outputFile: "./logs/logs.txt",
   tagDate: true,
   tagLevel: true,
+  tagColor: true,
   tagFileMessage: `Logging started at ${new Date().toISOString()}\nfrom origin ${process.cwd()}\n`,
   color: {
     [Level.Debug]: Colors.FgGreen,
@@ -42,7 +44,7 @@ const defaultOptions: Options = {
 export let options: Options = defaultOptions;
 
 /**
- * @param _options Custom parameters for logging, use {} for resetting defaults
+ * @param _options Custom parameters for logging, empty arguments reset to default options
  * @param {MLevel[]} _options.logLevels Array of levels to log, default all
  * @param {boolean} _options.enableLogging Enable logging to console, default true
  * @param {boolean} _options.enableFile Enable logging to file, default false
@@ -52,15 +54,17 @@ export let options: Options = defaultOptions;
  * @param {string} _options.tagFileMessage tags file with a message, default Logging started at Date.now()\nfromorigin process.cwd()
  * @param _options.color Colors for logging levels
  */
-export const setup = (_options: Partial<Options>) =>
+export const setup = (_options?: Partial<Options>) =>
   createOptions(_options) && (stream = createStream());
 
-const createOptions = (_options: Partial<Options>) =>
-  (options = {
-    ...options,
-    ..._options,
-    color: { ...options.color, ..._options.color },
-  });
+const createOptions = (_options?: Partial<Options>) =>
+  !_options
+    ? (options = defaultOptions)
+    : (options = {
+        ...options,
+        ..._options,
+        color: { ...options.color, ..._options?.color },
+      });
 
 const createStream = (_stream?: fs.WriteStream) => {
   if (options.outputFile && options.enableFile) {
