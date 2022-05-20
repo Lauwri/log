@@ -56,5 +56,6 @@ Set global options for logger
 | outputFile     | Path to log output file    | ./logs/logs.txt                    |
 | tagDate        | Tags file with a timestamp | true                               |
 | tagLevel       | Tags file with a log level | true                               |
+| tagColor       | Tags file with a color     | true                               |
 | tagFileMessage | Tags file with a message   | Logging started at n from origin x |
 | color          | Colors for logging levels  |                                    |

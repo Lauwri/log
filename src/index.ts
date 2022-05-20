@@ -51,6 +51,7 @@ export let options: Options = defaultOptions;
  * @param {string} _options.outputFile path to log output file, default ./logs/logs.txt
  * @param {string} _options.tagDate tags file with a timestamp, default true
  * @param {boolean} _options.tagLevel tags file with a log level, default true
+ * @param {boolean} _options.tagColor tags file with a color, default true
  * @param {string} _options.tagFileMessage tags file with a message, default Logging started at Date.now()\nfromorigin process.cwd()
  * @param _options.color Colors for logging levels
  */
