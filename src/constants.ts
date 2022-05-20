@@ -6,10 +6,10 @@
  * @enum {MLevel}
  */
 export enum Level {
-  Debug,
-  Critical,
-  Warning,
-  Info,
+  Debug = "Debug",
+  Error = "Error",
+  Warning = "Warning",
+  Info = "Info",
 }
 
 /**

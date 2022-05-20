@@ -4,40 +4,56 @@ import { Options } from "./index";
 import { write } from "./stream";
 import { FileData } from "./utils/getCallerFile";
 
-const NO_PARSE = ["string", "boolean", "number", "undefined"];
+const NO_PARSE = ["string", "boolean", "number", "undefined", "null"];
+
 type Template = (
   fileData?: FileData,
-  str?: any,
+  msg?: any,
   color?: Colors,
-  stripped?: boolean
+  level?: Level,
+  timestamp?: boolean
 ) => string;
 const template: Template = (
   fileData?,
   msg = "%s",
-  color = Colors.FgWhite,
-  stripped = false
+  color?,
+  level?,
+  timestamp = true
 ) => {
-  const date = new Date().toISOString();
+  const date = timestamp ? `${new Date().toISOString()} ` : "";
+  const levelStr = level ? `${level.toUpperCase()}: ` : "";
   const origin = fileData?.string;
-
-  const parsed = NO_PARSE.includes(typeof msg)
+  const message = NO_PARSE.includes(typeof msg)
     ? msg
     : JSON.stringify(msg, null, 2);
-  if (stripped) return `${date}${origin ? " " + origin : ""}: ${parsed}`;
-  return `${color}${date}${origin ? " " + origin : ""}: ${parsed}\x1b[0m`;
+
+  if (!color) return `${levelStr}${date}${origin}: ${message}`;
+  return `${color}${levelStr}${date}${origin}: ${message}`;
 };
 
 const log =
   (options: Options, stream?: fs.WriteStream, fileData?: FileData) =>
   (level: Level, msg?: any, args?: any[]) => {
-    if (options.enableLogging && options.logLevels.includes(level))
-      console.log(
-        template(fileData, undefined, options.color[level]),
-        msg,
-        ...(args || [])
+    const tagLevel = options.tagLevel ? level : undefined;
+    const tagDate = options.tagDate;
+
+    if (options.enableLogging && options.logLevels.includes(level)) {
+      const temp = template(
+        fileData,
+        undefined,
+        options.tagColor ? options.color[level] : undefined,
+        tagLevel,
+        tagDate
       );
+      options.tagColor
+        ? console.log(temp, msg, ...(args || []), Colors.Reset)
+        : console.log(temp, msg, ...(args || []));
+    }
     if (stream) {
-      write(stream)(template(fileData, msg, undefined, true) + "\n", args);
+      write(stream)(
+        template(fileData, msg, undefined, tagLevel, tagDate) + "\n",
+        args
+      );
     }
   };
 
