@@ -17,7 +17,7 @@ export interface Options {
   color: {
     [Level.Debug]: Colors;
     [Level.Error]: Colors;
-    [Level.Warning]: Colors;
+    [Level.Warn]: Colors;
     [Level.Info]: Colors;
   };
 }
@@ -36,7 +36,7 @@ const defaultOptions: Options = {
   color: {
     [Level.Debug]: Colors.FgGreen,
     [Level.Error]: Colors.FgRed,
-    [Level.Warning]: Colors.FgYellow,
+    [Level.Warn]: Colors.FgYellow,
     [Level.Info]: Colors.FgWhite,
   },
 };
@@ -82,7 +82,7 @@ export let stream = createStream();
 const _log = () => log(options, stream, getCallerFile());
 type LogFn = (message?: any, ...args: any[]) => void;
 export const debug: LogFn = (msg, ...args) => _log()(Level.Debug, msg, args);
-export const warn: LogFn = (msg, ...args) => _log()(Level.Warning, msg, args);
+export const warn: LogFn = (msg, ...args) => _log()(Level.Warn, msg, args);
 export const error: LogFn = (msg, ...args) => _log()(Level.Error, msg, args);
 export const info: LogFn = (msg, ...args) => _log()(Level.Info, msg, args);
 

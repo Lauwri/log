@@ -8,7 +8,7 @@
 export enum Level {
   Debug = "Debug",
   Error = "Error",
-  Warning = "Warning",
+  Warn = "Warn",
   Info = "Info",
 }
 
