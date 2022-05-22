@@ -38,14 +38,9 @@ const log =
     const tagDate = options.tagDate;
 
     if (options.enableLogging && options.logLevels.includes(level)) {
-      const temp = template(
-        fileData,
-        undefined,
-        options.tagColor ? options.color[level] : undefined,
-        tagLevel,
-        tagDate
-      );
-      options.tagColor
+      const color = options.tagColor ? options.color[level] : undefined;
+      const temp = template(fileData, undefined, color, tagLevel, tagDate);
+      color
         ? console.log(temp, msg, ...(args || []), Colors.Reset)
         : console.log(temp, msg, ...(args || []));
     }

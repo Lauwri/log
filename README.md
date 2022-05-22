@@ -52,12 +52,41 @@ Set global options for logger
 
 | command        | description                | default                            |
 | -------------- | -------------------------- | ---------------------------------- |
-| logLevels      | Array of levels to log     | Debug,Info,Warn,Error              |
-| enableLogging  | Enable logging to console  | true                               |
-| enableFile     | Enable logging to file     | false                              |
+| logLevels      | Array of levels to log     | `Info`,`Debug`,`Warn`,`Error`      |
+| enableLogging  | Enable logging to console  | `true`                             |
+| enableFile     | Enable logging to file     | `false`                            |
 | outputFile     | Path to log output file    | ./logs/logs.txt                    |
-| tagDate        | Tags file with a timestamp | true                               |
-| tagLevel       | Tags file with a log level | true                               |
-| tagColor       | Tags file with a color     | true                               |
+| tagDate        | Tags file with a timestamp | `true`                             |
+| tagLevel       | Tags file with a log level | `true`                             |
+| tagColor       | Tags file with a color     | `true`                             |
 | tagFileMessage | Tags file with a message   | Logging started at n from origin x |
 | color          | Colors for logging levels  |                                    |
+
+`Colors`:  
+ANSI colorcodes. If any color is present, log adds `Reset` as last argument to console.
+
+| Name       | Value      |
+| ---------- | ---------- |
+| Reset      | "\x1b[0m"  |
+| Bright     | "\x1b[1m"  |
+| Dim        | "\x1b[2m"  |
+| Underscore | "\x1b[4m"  |
+| Blink      | "\x1b[5m"  |
+| Reverse    | "\x1b[7m"  |
+| Hidden     | "\x1b[8m"  |
+| FgBlack    | "\x1b[30m" |
+| FgRed      | "\x1b[31m" |
+| FgGreen    | "\x1b[32m" |
+| FgYellow   | "\x1b[33m" |
+| FgBlue     | "\x1b[34m" |
+| FgMagenta  | "\x1b[35m" |
+| FgCyan     | "\x1b[36m" |
+| FgWhite    | "\x1b[37m" |
+| BgBlack    | "\x1b[40m" |
+| BgRed      | "\x1b[41m" |
+| BgGreen    | "\x1b[42m" |
+| BgYellow   | "\x1b[43m" |
+| BgBlue     | "\x1b[44m" |
+| BgMagenta  | "\x1b[45m" |
+| BgCyan     | "\x1b[46m" |
+| BgWhite    | "\x1b[47m" |
