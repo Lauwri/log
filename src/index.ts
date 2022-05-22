@@ -5,6 +5,9 @@ import createWriteStream from "./stream";
 import getCallerFile from "./utils/getCallerFile";
 import tagFile from "./utils/tagFile";
 
+// Re-export colors and levels for convenience
+export { Colors, Level };
+
 export interface Options {
   logLevels: Level[];
   enableLogging: boolean;
@@ -15,10 +18,10 @@ export interface Options {
   tagColor?: boolean;
   tagFileMessage: string;
   color: {
-    [Level.Debug]: Colors;
-    [Level.Error]: Colors;
-    [Level.Warn]: Colors;
-    [Level.Info]: Colors;
+    [Level.Debug]?: Colors;
+    [Level.Error]?: Colors;
+    [Level.Warn]?: Colors;
+    [Level.Info]?: Colors;
   };
 }
 
@@ -73,7 +76,7 @@ const createStream = (_stream?: fs.WriteStream) => {
     return createWriteStream(
       options.tagDate ? tagFile(options.outputFile) : options.outputFile,
       options.tagFileMessage
-    ); // Should tagging be an option?
+    );
   }
 };
 // Expose stream for custom actions
