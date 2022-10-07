@@ -11,14 +11,16 @@ type Template = (
   msg?: any,
   color?: Colors,
   level?: Level,
-  timestamp?: boolean
+  timestamp?: boolean,
+  customTag?: string
 ) => string;
 const template: Template = (
-  fileData?,
+  fileData,
   msg = "%s",
-  color?,
-  level?,
-  timestamp = true
+  color,
+  level,
+  timestamp = true,
+  customTag
 ) => {
   const date = timestamp ? `${new Date().toISOString()} ` : "";
   const levelStr = level ? `${level.toUpperCase()}: ` : "";
@@ -27,26 +29,35 @@ const template: Template = (
     ? msg
     : JSON.stringify(msg, null, 2);
 
-  if (!color) return `${levelStr}${date}${origin}: ${message}`;
-  return `${color}${levelStr}${date}${origin}: ${message}`;
+  return `${color || ""}${
+    customTag || `${levelStr}${date}${origin || ""}:`
+  } ${message}`;
 };
 
 const log =
   (options: Options, stream?: fs.WriteStream, fileData?: FileData) =>
-  (level: Level, msg?: any, args?: any[]) => {
+  (level: Level, msg?: any, args?: any[], customTag?: string) => {
     const tagLevel = options.tagLevel ? level : undefined;
     const tagDate = options.tagDate;
 
     if (options.enableLogging && options.logLevels.includes(level)) {
       const color = options.tagColor ? options.color[level] : undefined;
-      const temp = template(fileData, undefined, color, tagLevel, tagDate);
+      const temp = template(
+        fileData,
+        undefined,
+        color,
+        tagLevel,
+        tagDate,
+        customTag
+      );
+      const consoleFn = console[options.levelToConsole[level]];
       color
-        ? console.log(temp, msg, ...(args || []), Colors.Reset)
-        : console.log(temp, msg, ...(args || []));
+        ? consoleFn(temp, msg, ...(args || []), Colors.Reset)
+        : consoleFn(temp, msg, ...(args || []));
     }
     if (stream) {
       write(stream)(
-        template(fileData, msg, undefined, tagLevel, tagDate) + "\n",
+        template(fileData, msg, undefined, tagLevel, tagDate, customTag) + "\n",
         args
       );
     }

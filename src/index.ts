@@ -18,10 +18,10 @@ export interface Options {
   tagColor?: boolean;
   tagFileMessage: string;
   color: {
-    [Level.Debug]?: Colors;
-    [Level.Error]?: Colors;
-    [Level.Warn]?: Colors;
-    [Level.Info]?: Colors;
+    [key in Level]?: Colors;
+  };
+  levelToConsole: {
+    [key in Level]: "log" | "error" | "debug" | "warn";
   };
 }
 
@@ -41,6 +41,12 @@ const defaultOptions: Options = {
     [Level.Error]: Colors.FgRed,
     [Level.Warn]: Colors.FgYellow,
     [Level.Info]: Colors.FgWhite,
+  },
+  levelToConsole: {
+    [Level.Debug]: "debug",
+    [Level.Error]: "error",
+    [Level.Warn]: "warn",
+    [Level.Info]: "log",
   },
 };
 
@@ -68,6 +74,10 @@ const createOptions = (_options?: Partial<Options>) =>
         ...options,
         ..._options,
         color: { ...options.color, ..._options?.color },
+        levelToConsole: {
+          ...options.levelToConsole,
+          ..._options?.levelToConsole,
+        },
       });
 
 const createStream = (_stream?: fs.WriteStream) => {
@@ -82,11 +92,43 @@ const createStream = (_stream?: fs.WriteStream) => {
 // Expose stream for custom actions
 export let stream = createStream();
 
-const _log = () => log(options, stream, getCallerFile());
 type LogFn = (message?: any, ...args: any[]) => void;
-export const debug: LogFn = (msg, ...args) => _log()(Level.Debug, msg, args);
-export const warn: LogFn = (msg, ...args) => _log()(Level.Warn, msg, args);
-export const error: LogFn = (msg, ...args) => _log()(Level.Error, msg, args);
-export const info: LogFn = (msg, ...args) => _log()(Level.Info, msg, args);
 
-export default { debug, warn, error, info, setup };
+const _log = () => log(options, stream, getCallerFile());
+
+// Basic logging functions
+const __log =
+  (level: Level): LogFn =>
+  (msg, ...args) =>
+    _log()(level, msg, args);
+
+export const debug = __log(Level.Debug);
+export const warn = __log(Level.Warn);
+export const error = __log(Level.Error);
+export const info = __log(Level.Info);
+
+// Logging functions with custom tag
+const __logc =
+  (level: Level) =>
+  (customTag: string): LogFn =>
+  (msg, ...args) =>
+    _log()(level, msg, args, customTag);
+
+export const debugc = __logc(Level.Debug);
+export const warnc = __logc(Level.Warn);
+export const errorc = __logc(Level.Error);
+export const infoc = __logc(Level.Info);
+
+export default {
+  debug,
+  warn,
+  error,
+  info,
+
+  debugc,
+  warnc,
+  errorc,
+  infoc,
+
+  setup,
+};

@@ -6,36 +6,33 @@ describe("Console log tests", () => {
   const debugSpy = jest.spyOn(global.console, "debug");
   const warnSpy = jest.spyOn(global.console, "warn");
   const errorSpy = jest.spyOn(global.console, "error");
+  const expectTag = expect.stringMatching("This is a custom tag:");
 
   it("Should print source correctly", () => {
-    log.debug("Test string1");
-    const strMatch1 = expect.stringMatching(" print.test.ts:11:9: %s");
+    log.debugc("This is a custom tag:")("Test string1");
     expect(debugSpy).toHaveBeenCalledWith(
-      strMatch1,
+      expectTag,
       "Test string1",
       Colors.Reset
     );
 
-    log.info("Test string2");
-    const strMatch2 = expect.stringMatching(" print.test.ts:19:9: %s");
+    log.infoc("This is a custom tag:")("Test string2");
     expect(logSpy).toHaveBeenCalledWith(
-      strMatch2,
+      expectTag,
       "Test string2",
       Colors.Reset
     );
 
-    log.warn("Test string3");
-    const strMatch3 = expect.stringMatching(" print.test.ts:27:9: %s");
+    log.warnc("This is a custom tag:")("Test string3");
     expect(warnSpy).toHaveBeenCalledWith(
-      strMatch3,
+      expectTag,
       "Test string3",
       Colors.Reset
     );
 
-    log.error("Test string4");
-    const strMatch4 = expect.stringMatching(" print.test.ts:35:9: %s");
+    log.errorc("This is a custom tag:")("Test string4");
     expect(errorSpy).toHaveBeenCalledWith(
-      strMatch4,
+      expectTag,
       "Test string4",
       Colors.Reset
     );
@@ -57,30 +54,30 @@ describe("Console log tests", () => {
 
   it("Should print variables correctly", () => {
     testVariables.forEach((variable) => {
-      log.debug(variable);
+      log.debugc("This is a custom tag:")(variable);
       expect(debugSpy).toHaveBeenLastCalledWith(
-        expect.any(String),
+        expectTag,
         variable,
         Colors.Reset
       );
 
-      log.info(variable);
+      log.infoc("This is a custom tag:")(variable);
       expect(logSpy).toHaveBeenLastCalledWith(
-        expect.any(String),
+        expectTag,
         variable,
         Colors.Reset
       );
 
-      log.warn(variable);
+      log.warnc("This is a custom tag:")(variable);
       expect(warnSpy).toHaveBeenLastCalledWith(
-        expect.any(String),
+        expectTag,
         variable,
         Colors.Reset
       );
 
-      log.error(variable);
+      log.errorc("This is a custom tag:")(variable);
       expect(errorSpy).toHaveBeenLastCalledWith(
-        expect.any(String),
+        expectTag,
         variable,
         Colors.Reset
       );
@@ -88,30 +85,30 @@ describe("Console log tests", () => {
   });
 
   it("Should print multiple arguments correctly", () => {
-    log.debug(...testVariables);
+    log.debugc("This is a custom tag:")(...testVariables);
     expect(debugSpy).toHaveBeenLastCalledWith(
-      expect.any(String),
+      expectTag,
       ...testVariables,
       Colors.Reset
     );
 
-    log.info(...testVariables);
+    log.infoc("This is a custom tag:")(...testVariables);
     expect(logSpy).toHaveBeenLastCalledWith(
-      expect.any(String),
+      expectTag,
       ...testVariables,
       Colors.Reset
     );
 
-    log.warn(...testVariables);
+    log.warnc("This is a custom tag:")(...testVariables);
     expect(warnSpy).toHaveBeenLastCalledWith(
-      expect.any(String),
+      expectTag,
       ...testVariables,
       Colors.Reset
     );
 
-    log.error(...testVariables);
+    log.errorc("This is a custom tag:")(...testVariables);
     expect(errorSpy).toHaveBeenLastCalledWith(
-      expect.any(String),
+      expectTag,
       ...testVariables,
       Colors.Reset
     );
