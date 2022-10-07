@@ -31,7 +31,7 @@ describe("Options tests", () => {
     log.setup({
       tagColor: false,
     });
-    log.error("Test string no tag color");
+    log.info("Test string no tag color");
     const str = expect.not.stringContaining("\x1b[37m");
     expect(logSpy).toHaveBeenCalledWith(str, "Test string no tag color");
   });

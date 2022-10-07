@@ -42,25 +42,31 @@ log.debug("This is a debug log");
 import log from "@lauwri/log";
 ```
 
-`info` `warn` `error` `debug` `(message?: any, ...args: any[])`:  
+`info` `warn` `error` `debug` :  
+`(message?: any, ...args: any[]) => void`  
 Log by level
+
+`infoc` `warnc` `errorc` `debugc` :  
+`(customTag: string) => (message?: any, ...args: any[]) => void`  
+Log by level with custom tag
 
 `setup(options)`:  
 Set global options for logger
 
 `options`:
 
-| command        | description                | default                            |
-| -------------- | -------------------------- | ---------------------------------- |
-| logLevels      | Array of levels to log     | `Info`,`Debug`,`Warn`,`Error`      |
-| enableLogging  | Enable logging to console  | `true`                             |
-| enableFile     | Enable logging to file     | `false`                            |
-| outputFile     | Path to log output file    | ./logs/logs.txt                    |
-| tagDate        | Tags file with a timestamp | `true`                             |
-| tagLevel       | Tags file with a log level | `true`                             |
-| tagColor       | Tags file with a color     | `true`                             |
-| tagFileMessage | Tags file with a message   | Logging started at n from origin x |
-| color          | Colors for logging levels  |                                    |
+| command        | description                 | default                            |
+| -------------- | --------------------------- | ---------------------------------- |
+| logLevels      | Array of levels to log      | `Info`,`Debug`,`Warn`,`Error`      |
+| enableLogging  | Enable logging to console   | `true`                             |
+| enableFile     | Enable logging to file      | `false`                            |
+| outputFile     | Path to log output file     | ./logs/logs.txt                    |
+| tagDate        | Tags file with a timestamp  | `true`                             |
+| tagLevel       | Tags file with a log level  | `true`                             |
+| tagColor       | Tags file with a color      | `true`                             |
+| tagFileMessage | Tags file with a message    | Logging started at n from origin x |
+| color          | Colors for logging levels   |                                    |
+| levelToConsole | maps log level to consoleFN |                                    |
 
 `Colors`:  
 ANSI colorcodes. If any color is present, log adds `Reset` as last argument to console.
